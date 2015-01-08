@@ -1,4 +1,4 @@
-update=2015/1/8 15:20:12
+update=2015年01月08日 星期四 21时35分27秒
 version=1
 last_client=kicad
 [cvpcb]
@@ -65,8 +65,6 @@ SolderMaskMinWidth=0.000000000000
 DrawSegmentWidth=0.200000000000
 BoardOutlineThickness=0.100000000000
 ModuleOutlineThickness=0.150000000000
-[general]
-version=1
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
@@ -80,3 +78,5 @@ RptD_X=0
 RptD_Y=100
 RptLab=1
 LabSize=60
+[general]
+version=1
