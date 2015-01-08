@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name soundlevel)(type KiCad)(uri ${KIPRJMOD}/libs/soundlevel.pretty)(options "")(descr ""))
+)
