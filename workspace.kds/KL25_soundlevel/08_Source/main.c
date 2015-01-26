@@ -1,46 +1,48 @@
-//ËµÃ÷¼û¹¤³ÌÎÄ¼ş¼ĞÏÂµÄDocÎÄ¼ş¼ĞÄÚReadme.txtÎÄ¼ş
+//è¯´æ˜è§å·¥ç¨‹æ–‡ä»¶å¤¹ä¸‹çš„Docæ–‡ä»¶å¤¹å†…Readme.txtæ–‡ä»¶
 //============================================================================
 
-#include "includes.h"   //°üº¬×ÜÍ·ÎÄ¼ş
+#include "includes.h"  //åŒ…å«æ€»å¤´æ–‡ä»¶
 
 
 int main(void)
 {
-	//1. ÉùÃ÷Ö÷º¯ÊıÊ¹ÓÃµÄ±äÁ¿
-	uint_32  mRuncount;     //Ö÷Ñ­»·¼ÆÊıÆ÷
-	//2. ¹Ø×ÜÖĞ¶Ï
+	//1. å£°æ˜ä¸»å‡½æ•°ä½¿ç”¨çš„å˜é‡
+	uint_32  mRuncount;     //ä¸»å¾ªç¯è®¡æ•°å™¨
+	uint_16 ADCResult;
+	//2. å…³æ€»ä¸­æ–­
 	DISABLE_INTERRUPTS;
-
-	//3. ³õÊ¼»¯ÍâÉèÄ£¿é
-	light_init(RUN_LIGHT_BLUE, LIGHT_ON);  //À¶µÆ³õÊ¼»¯
-	uart_init(UART_0,MCGIRCLK, 9600);    //´®¿Ú0Ê±ÖÓMCGIRCLK(4000Khz)
-	uart_init (UART_1,BUSCLK, 9600);     //´®¿Ú1¡¢2Ê¹ÓÃ×ÜÏßÊ±ÖÓ24000Khz
-	uart_init (UART_2,BUSCLK, 9600);     //²¨ÌØÂÊÊ¹ÓÃ9600
-	uart_send_string(UART_0, "Hello Uart_0!\r\n"); //´®¿Ú·¢ËÍ³õÊ¼»¯ÌáÊ¾
-	uart_send_string(UART_1, "Hello Uart_1!\r\n");
-	uart_send_string(UART_2, "Hello Uart_2!\r\n");
-	//4. ¸øÓĞ¹Ø±äÁ¿¸³³õÖµ
-	mRuncount=0;            //Ö÷Ñ­»·¼ÆÊıÆ÷
-	//5. Ê¹ÄÜÄ£¿éÖĞ¶Ï
-	uart_enable_re_int(UART_0);   //Ê¹ÄÜ´®¿Ú0½ÓÊÕÖĞ¶Ï
-	uart_enable_re_int(UART_1);   //Ê¹ÄÜ´®¿Ú1½ÓÊÕÖĞ¶Ï
-	uart_enable_re_int(UART_2);   //Ê¹ÄÜ´®¿Ú2½ÓÊÕÖĞ¶Ï
-	//6. ¿ª×ÜÖĞ¶Ï
+	//3. åˆå§‹åŒ–å¤–è®¾æ¨¡å—
+	light_init(RUN_LIGHT_BLUE,LIGHT_OFF);     //åˆå§‹åŒ–è“è‰²RUNç¯
+    uart_init (UART_TEST,BUSCLK,9600);     //ä¸²å£1åˆå§‹åŒ–, æ€»çº¿æ—¶é’Ÿ24000Khz,æ³¢ç‰¹ç‡9600
+    adc_init(SINGLE_END,10,SAMPLE32);       //ADC0åˆå§‹åŒ–å•ç«¯è¾“å…¥ï¼Œ10ä½é‡‡æ ·ç²¾åº¦ï¼Œ32æ¬¡ç¡¬ä»¶å‡å€¼
+    uart_send_string(UART_TEST, "This is sound level Test!");
+    uart_send1(UART_TEST, '\n');
+    //4. ç»™æœ‰å…³å˜é‡èµ‹åˆå€¼
+	mRuncount=0;            //ä¸»å¾ªç¯è®¡æ•°å™¨
+    ADCResult=0;
+    //5. ä½¿èƒ½æ¨¡å—ä¸­æ–­
+    uart_enable_re_int(UART_TEST);
+    //6. å¼€æ€»ä¸­æ–­
 	ENABLE_INTERRUPTS;
     
-	//½øÈëÖ÷Ñ­»·
-	//Ö÷Ñ­»·¿ªÊ¼==================================================================
+	//è¿›å…¥ä¸»å¾ªç¯
+	//ä¸»å¾ªç¯å¼€å§‹=============================================================
 	for(;;)
 	{
-		//ÔËĞĞÖ¸Ê¾µÆ£¨RUN_LIGHT£©ÉÁË¸---------------------------------------------
-		mRuncount++;					   //Ö÷Ñ­»·´ÎÊı¼ÆÊıÆ÷+1
-		if (mRuncount >= RUN_COUNTER_MAX)  //Ö÷Ñ­»·´ÎÊı¼ÆÊıÆ÷´óÓÚÉè¶¨µÄºê³£Êı
+		mRuncount++;
+		//å¾ªç¯è®¡æ•°åˆ°ä¸€å®šçš„å€¼ï¼Œä½¿å°ç¯çš„äº®ã€æš—çŠ¶æ€åˆ‡æ¢
+		if (mRuncount > RUN_COUNTER_MAX)
 		{
-			mRuncount=0;				   //Ö÷Ñ­»·´ÎÊı¼ÆÊıÆ÷ÇåÁã
-			light_change(RUN_LIGHT_BLUE);  //À¶É«ÔËĞĞÖ¸Ê¾µÆ£¨RUN_LIGHT_BLUE£©×´Ì¬±ä»¯
-		}
-		//ÒÔÏÂ¼ÓÈëÓÃ»§³ÌĞò--------------------------------------------------------
-	}//Ö÷Ñ­»·end_for
-	//Ö÷Ñ­»·½áÊø==================================================================
+			mRuncount = 0;
+			//æŒ‡ç¤ºç¯çš„äº®ã€æš—çŠ¶æ€åˆ‡æ¢
+		    light_change(RUN_LIGHT_BLUE);  //è“è‰²è¿è¡ŒæŒ‡ç¤ºç¯ï¼ˆRUN_LIGHT_BLUEï¼‰çŠ¶æ€å˜åŒ–
+		    //è¿›è¡Œä¸€æ¬¡æ¨¡å—0é€šé“é‡‡æ ·
+			ADCResult = adc_read(MIC_CH);
+			//å°†é‡‡é›†çš„A/Då€¼é€šè¿‡ä¸²å£å‘é€åˆ°PC
+			uart_send1 (UART_TEST ,(uint_8)(ADCResult>>8));
+			uart_send1 (UART_TEST ,ADCResult);
+		} // end_if
+	}//ä¸»å¾ªç¯end_for
+	//ä¸»å¾ªç¯ç»“æŸ==================================================================
+	return 0;
 }
-
