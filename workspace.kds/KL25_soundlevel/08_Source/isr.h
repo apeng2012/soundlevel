@@ -23,6 +23,13 @@ extern void isr_uart1_re(void);
 extern void isr_adc(void);
 #define VECTOR_031  isr_adc
 
+
+#ifdef VECTOR_017
+	#undef VECTOR_017
+#endif
+extern void isr_dma1(void);
+#define VECTOR_017  isr_dma1
+
 #endif
 
 

@@ -4,36 +4,36 @@
 
 extern int main(void);
 
-//ÉùÃ÷ÄÚ²¿º¯Êı
+//å£°æ˜å†…éƒ¨å‡½æ•°
 static void vector_init(void);
 static void m_zero_fill_bss(void);
 static void m_data_seg_init(void);
 static void sys_pin_enable_port(void);
 
 
-//¿´ÃÅ¹·WDOG(COP)ºê¶¨Òå
-#define WDOG_DISABLE() {SIM_COPC = 0x00u;}  //½ûÓÃ¿´ÃÅ¹·
-//COPÊ¹ÓÃLPOÊ±ÖÓ£¬COPÔÚ2^10¸öLPOÊ±ÖÓÖÜÆÚºóÑÓÊ±
-#define WDOG_ENABLE() {SIM_COPC |= SIM_COPC_COPT_MASK;} //Ê¹ÄÜ¿´ÃÅ¹·
+//çœ‹é—¨ç‹—WDOG(COP)å®å®šä¹‰
+#define WDOG_DISABLE() {SIM_COPC = 0x00u;}  //ç¦ç”¨çœ‹é—¨ç‹—
+//COPä½¿ç”¨LPOæ—¶é’Ÿï¼ŒCOPåœ¨2^10ä¸ªLPOæ—¶é’Ÿå‘¨æœŸåå»¶æ—¶
+#define WDOG_ENABLE() {SIM_COPC |= SIM_COPC_COPT_MASK;} //ä½¿èƒ½çœ‹é—¨ç‹—
 
 
-// ÏµÍ³ÉÏµçÆô¶¯³ÌĞò
+// ç³»ç»Ÿä¸Šç”µå¯åŠ¨ç¨‹åº
  void startup(void)
 {
-	 WDOG_DISABLE();       //½ûÓÃ¿´ÃÅ¹·
-        //WDOG_ENABLE();        Ê¹ÄÜ¿´ÃÅ¹·  
-	vector_init();          //¸´ÖÆÖĞ¶ÏÏòÁ¿±íÖÁRAM
-	m_zero_fill_bss ();     //ÇåÁãÎ´³õÊ¼»¯BSSÊı¾İ¶Î
-	m_data_seg_init ();     //½«ROMÖĞµÄ³õÊ¼»¯Êı¾İ¿½±´µ½RAMÖĞ
-	sys_init();             //³õÊ¼»¯ÏµÍ³Ê±ÖÓ
-	sys_pin_enable_port();  //Ê¹ÄÜ¶Ë¿ÚÊ±ÖÓ
-	main();                 //½øÈëÖ÷º¯Êı
-	while(1);               //ÓÀ¾ÃÑ­»·£¨Ö÷º¯ÊıÄÚÓÀ¾ÃÑ­»·£¬º¬ÓĞÖ´ĞĞ²»µ½¸ÃÓï¾ä£©          
+	 WDOG_DISABLE();       //ç¦ç”¨çœ‹é—¨ç‹—
+        //WDOG_ENABLE();        ä½¿èƒ½çœ‹é—¨ç‹—
+	vector_init();          //å¤åˆ¶ä¸­æ–­å‘é‡è¡¨è‡³RAM
+	m_zero_fill_bss ();     //æ¸…é›¶æœªåˆå§‹åŒ–BSSæ•°æ®æ®µ
+	m_data_seg_init ();     //å°†ROMä¸­çš„åˆå§‹åŒ–æ•°æ®æ‹·è´åˆ°RAMä¸­
+	sys_init();             //åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿ
+	sys_pin_enable_port();  //ä½¿èƒ½ç«¯å£æ—¶é’Ÿ
+	main();                 //è¿›å…¥ä¸»å‡½æ•°
+	while(1);               //æ°¸ä¹…å¾ªç¯ï¼ˆä¸»å‡½æ•°å†…æ°¸ä¹…å¾ªç¯ï¼Œå«æœ‰æ‰§è¡Œä¸åˆ°è¯¥è¯­å¥ï¼‰
 }
 
 //-------------------------------------------------------------------------------
 
-//¿½±´ÖĞ¶ÏÏòÁ¿±í
+//æ‹·è´ä¸­æ–­å‘é‡è¡¨
 void vector_init(void)
 {
 	extern char __VECTOR_RAM[];
@@ -49,7 +49,7 @@ void vector_init(void)
       SCB_VTOR=(uint_32)__VECTOR_RAM;
 }
 
-// ³õÊ¼»¯BSS¶Î
+// åˆå§‹åŒ–BSSæ®µ
 void m_zero_fill_bss(void)
 {
 	extern char __START_BSS[];
@@ -63,7 +63,7 @@ void m_zero_fill_bss(void)
     	*bss_start++ = 0;
 }
 
-//¸´ÖÆROMÊı¾İÖÁRAM
+//å¤åˆ¶ROMæ•°æ®è‡³RAM
 void m_data_seg_init(void)
 {
 	extern char __START_DATA[];
@@ -79,7 +79,7 @@ void m_data_seg_init(void)
 	    *data_start++ = *data_rom_start++;
 }
 
-//Ê¹ÄÜ¶Ë¿ÚÊ±ÖÓ
+//ä½¿èƒ½ç«¯å£æ—¶é’Ÿ
 void sys_pin_enable_port(void)
 {
 	SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK

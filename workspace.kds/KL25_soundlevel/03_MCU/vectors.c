@@ -1,15 +1,15 @@
 //===========================================================================
-//ÎÄ¼şÃû³Æ£ºvectors.c
-//¹¦ÄÜ¸ÅÒª£º¶¨ÒåÖĞ¶ÏÏòÁ¿±íÔ´ÎÄ¼ş
-//°æÈ¨ËùÓĞ£ºËÕÖİ´óÑ§·ÉË¼¿¨¶ûÇ¶ÈëÊ½ÖĞĞÄ(sumcu.suda.edu.cn)
-//¸üĞÂ¼ÇÂ¼£º2013-02-22V1.2;2013-05-08V2.0(WYH) 
+//æ–‡ä»¶åç§°ï¼švectors.c
+//åŠŸèƒ½æ¦‚è¦ï¼šå®šä¹‰ä¸­æ–­å‘é‡è¡¨æºæ–‡ä»¶
+//ç‰ˆæƒæ‰€æœ‰ï¼šè‹å·å¤§å­¦é£æ€å¡å°”åµŒå…¥å¼ä¸­å¿ƒ(sumcu.suda.edu.cn)
+//æ›´æ–°è®°å½•ï¼š2013-02-22V1.2;2013-05-08V2.0(WYH)
 //===========================================================================
 
 #include "vectors.h"
 
-extern unsigned long __BOOT_STACK_ADDRESS;   //ÔÚ"intflash.ld¡°ÎÄ¼şÖĞ¶¨Òå
+extern unsigned long __BOOT_STACK_ADDRESS;   //åœ¨"intflash.ldâ€œæ–‡ä»¶ä¸­å®šä¹‰
 
-// KL25ÖĞ¶ÏÏòÁ¿±í
+// KL25ä¸­æ–­å‘é‡è¡¨
 __attribute__ ((section (".vectortable"))) vector_entry rom_vector[] = 
 {
     (vector_entry)(&__BOOT_STACK_ADDRESS),   //0x00  0x00000000-ivINT_Initial_Stack_Pointer

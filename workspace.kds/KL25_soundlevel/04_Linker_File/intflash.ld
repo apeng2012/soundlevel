@@ -1,6 +1,6 @@
 /* ################################################################### */
 /*##
-/*##     ���ļ�Ϊ���߲�������Ҫ�޸� */
+/*##     该文件为工具产生，不要修改 */
 /*##                                   */
 /*##                                   */
 /*##     Processor : MKL25Z128VLK4     */
@@ -11,26 +11,26 @@
 /*##                                   */
 /*##     Abstract  :                   */
 /*##                                   */
-/*##     ���ļ�Ϊ�����ļ������ļ��������ļ���α����ӣ��Լ��ڴ淶Χ��ջ��С�����compiler�ĵ��� */
-/*##     ����ͨ����������Generate linker file Ϊno�ر��Զ��������ļ� */
+/*##     该文件为链接文件。该文件描述了文件如何被链接，以及内存范围，栈大小。详见compiler文档。 */
+/*##     可以通过设置属性Generate linker file 为no关闭自动产生该文件 */
 /*##                                    */
 /*##
 /*##                                   */
 /*## ###################################################################*/
 
 
-/* ����ʼ�� */
-/*����startup*/
+/* 程序开始点 */
+/*进入startup*/
 ENTRY(startup)
 
-/* �û�ģʽջ����ߵ�ַ */
+/* 用户模式栈的最高地址 */
 _estack = 0x20003000;    /* end of m_data */
 __SP_INIT = _estack;
 __BOOT_STACK_ADDRESS = _estack;
 
-/* ���ջ�Ͷ�δ��ӦRAM����������Ӵ��� */
-__heap_size = 0x00;;                   /* ��Ҫ�ĶѵĴ�С  */
-__stack_size = 0x0400;                 /* ջ��С */
+/* 如果栈和堆未适应RAM，会产生链接错误 */
+__heap_size = 0x00;;                   /* 需要的堆的大小  */
+__stack_size = 0x0400;                 /* 栈大小 */
 
 
 MEMORY {
@@ -45,28 +45,28 @@ MEMORY {
   m_cfmprotrom  (RX) : ORIGIN = 0x00000400, LENGTH = 0x00000010
 }
 
-/* �Ը���������ݵĶ��� */
+/* 对各个块的内容的定义 */
 SECTIONS
 {
-  __VECTOR_RAM       = 0x1FFFF000;    /*�ж���������RAM�е�λ��*/
+  __VECTOR_RAM       = 0x1FFFF000;    /*中断向量表在RAM中的位置*/
   
-  /*�ȼ����ж���������һ��Ϊstartup  */
+  /*先加载中断向量，第一个为startup  */
   .interrupts :
   {
     __vector_table = .;
     . = ALIGN(4);
-    KEEP(*(.vectortable)) /* Startup ���� */
+    KEEP(*(.vectortable)) /* Startup 代码 */
     . = ALIGN(4);
   } > m_interrupts
 
   .cfmprotect :
   {
     . = ALIGN(4);
-        KEEP(*(.cfmconfig))     /* Flash ������(FCF) */
+        KEEP(*(.cfmconfig))     /* Flash 配置域(FCF) */
         . = ALIGN(4);
   } > m_cfmprotrom
 
-  /* ���������������ݷ����ڲ�flash */
+  /* 程序代码和其他数据放入内部flash */
   .text :
   {
     . = ALIGN(4);
@@ -83,8 +83,8 @@ SECTIONS
 
     . = ALIGN(4);
 
-    _etext = .;        /* ����һ��ȫ�ֵ�symbol�ڴ���ĩ�� */
-    __START_DATA_ROM = _etext;  /* ��ʼ������ֵ */
+    _etext = .;        /* 定义一个全局的symbol在代码末端 */
+    __START_DATA_ROM = _etext;  /* 初始化变量值 */
     
   } > m_text
 
@@ -151,30 +151,30 @@ SECTIONS
         ___ROM_AT = .;
   } > m_text
 
-  /* �Ѹ�ֵ�������Ƶ�RAM������LMA */
+  /* 已赋值变量复制到RAM，加载LMA */
   .data : AT(___ROM_AT)
   {
     . = ALIGN(4);
-    _sdata = .;        /* ���ݿ�ʼ������һ��ȫ�ֵı�� */
-    __START_DATA = _sdata; /* ��ʼ��DATA�ο�ʼ */
+    _sdata = .;        /* 数据开始处产生一个全局的标记 */
+    __START_DATA = _sdata; /* 初始化DATA段开始 */
     *(.data)           /* .data sections */
     *(.data*)          /* .data* sections */
 
     . = ALIGN(4);
-    /* # ��������� */
+    /* # 结束处标记 */
 
-    _edata = .;        /* ����ȫ�ֱ���� */
-    __END_DATA = _edata; /* ��ʼ��DATA�ν��� */
+    _edata = .;        /* 定义全局标记量 */
+    __END_DATA = _edata; /* 初始化DATA段结束 */
   } > m_data
 
   ___data_size = _edata - _sdata;
-/* RAM�д������ */
+/* RAM中存放数据 */
   ___m_data_1FFFF000_ROMStart = ___ROM_AT + SIZEOF(.data);
   .m_data_1FFFF000 : AT(___m_data_1FFFF000_ROMStart)
   {
      . = ALIGN(4);
      ___m_data_1FFFF000_RAMStart = .;
-     *(.m_data_1FFFF000) /* �û������� */
+     *(.m_data_1FFFF000) /* 用户定义区 */
      ___m_data_1FFFF000_RAMEnd = .;
      . = ALIGN(4);
   } > m_data_1FFFF000
@@ -182,7 +182,7 @@ SECTIONS
 
 
 
-  /* δ��ʼ�����ݲ��� */
+  /* 未初始化数据部分 */
   . = ALIGN(4);
   .bss :
   {
@@ -198,7 +198,7 @@ SECTIONS
     __bss_end__ = __END_BSS;
   } > m_data
 
-  /*�û���ջ���֣���������Ƿ����㹻��RAM  */
+  /*用户堆栈部分，用来检查是否有足够的RAM  */
   ._user_heap_stack :
   {
     . = ALIGN(4);

@@ -1,20 +1,20 @@
 //===========================================================================
-//ÎÄ¼şÃû³Æ£ºvectors.h
-//¹¦ÄÜ¸ÅÒª£º¶¨ÒåÖĞ¶ÏÏòÁ¿±íÍ·ÎÄ¼ş
-//°æÈ¨ËùÓĞ£ºËÕÖİ´óÑ§·ÉË¼¿¨¶ûÇ¶ÈëÊ½ÖĞĞÄ(sumcu.suda.edu.cn)
-//¸üĞÂ¼ÇÂ¼£º2013-02-22V1.2;2013-05-08V2.0(WYH)  
+//æ–‡ä»¶åç§°ï¼švectors.h
+//åŠŸèƒ½æ¦‚è¦ï¼šå®šä¹‰ä¸­æ–­å‘é‡è¡¨å¤´æ–‡ä»¶
+//ç‰ˆæƒæ‰€æœ‰ï¼šè‹å·å¤§å­¦é£æ€å¡å°”åµŒå…¥å¼ä¸­å¿ƒ(sumcu.suda.edu.cn)
+//æ›´æ–°è®°å½•ï¼š2013-02-22V1.2;2013-05-08V2.0(WYH)
 //===========================================================================
-#ifndef VECTORS_H   //·ÀÖ¹ÖØ¸´¶¨Òå£¨ ¿ªÍ·)
+#ifndef VECTORS_H   //é˜²æ­¢é‡å¤å®šä¹‰ï¼ˆ å¼€å¤´)
 #define VECTORS_H
 
 
- //¶¨Òå¡°vector_entry¡±Îªº¯ÊıÖ¸ÕëÀàĞÍ£¬¸ÃÀàĞÍº¯Êı·µ»ØÖµÎª¡°void¡±£¬ÊäÈë²ÎÊıÎª¡°void¡±
+ //å®šä¹‰â€œvector_entryâ€ä¸ºå‡½æ•°æŒ‡é’ˆç±»å‹ï¼Œè¯¥ç±»å‹å‡½æ•°è¿”å›å€¼ä¸ºâ€œvoidâ€ï¼Œè¾“å…¥å‚æ•°ä¸ºâ€œvoidâ€
 typedef void (*vector_entry)(void);  
 
-extern void startup(void);     //ÔÚ¡±startup.c"ÎÄ¼şÖĞ
-#define BOOT_START startup     //ÒÔ±ãÊ¹ÓÃBOOT_START±ğÃû×÷ÎªÆô¶¯º¯ÊıÈë¿Ú
+extern void startup(void);     //åœ¨â€startup.c"æ–‡ä»¶ä¸­
+#define BOOT_START startup     //ä»¥ä¾¿ä½¿ç”¨BOOT_STARTåˆ«åä½œä¸ºå¯åŠ¨å‡½æ•°å…¥å£
 
-extern void NOS_isrDummy(void); //DEFAULT_VECTORº¯ÊıÔÚ¡°vectors.c¡±ÖĞ
+extern void NOS_isrDummy(void); //DEFAULT_VECTORå‡½æ•°åœ¨â€œvectors.câ€ä¸­
 #define DEFAULT_VECTOR  NOS_isrDummy
 
 #define VECTOR_002    DEFAULT_VECTOR
@@ -64,7 +64,7 @@ extern void NOS_isrDummy(void); //DEFAULT_VECTORº¯ÊıÔÚ¡°vectors.c¡±ÖĞ
 #define VECTOR_046    DEFAULT_VECTOR
 #define VECTOR_047    DEFAULT_VECTOR
 
-#include "isr.h"   //ÖØÔØÖĞ¶ÏÏòÁ¿ºÅ
+#include "isr.h"   //é‡è½½ä¸­æ–­å‘é‡å·
 
   
-#endif  //·ÀÖ¹ÖØ¸´¶¨Òå(½áÎ²)
+#endif  //é˜²æ­¢é‡å¤å®šä¹‰(ç»“å°¾)
