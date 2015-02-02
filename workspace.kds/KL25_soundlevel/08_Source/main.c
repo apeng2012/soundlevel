@@ -4,26 +4,29 @@
 #include "includes.h"  //包含总头文件
 
 uint_16 ADCResult;
+uint_16 voice_buf[4000]; // 0.5s @ 8ksps
 
 int main(void)
 {
 	//1. 声明主函数使用的变量
 	uint_32  mRuncount;     //主循环计数器
+	uint_32 i;
 	//2. 关总中断
 	DISABLE_INTERRUPTS;
 	//3. 初始化外设模块
 	light_init(RUN_LIGHT_BLUE,LIGHT_OFF);     //初始化蓝色RUN灯
     uart_init (UART_TEST,BUSCLK,9600);     //串口1初始化, 总线时钟24000Khz,波特率9600
-    adc_init(SINGLE_END, 16, 0);       //ADC0初始化单端输入，10位采样精度
-    uart_send_string(UART_TEST, "This is sound level Test!");
-    uart_send1(UART_TEST, '\n');
-    pit_init(PIT0,500000); // 0.5s
+    adc_init(SINGLE_END, 16, 0);       //ADC0初始化单端输入，16位采样精度
+    dmaInitPerToMem (MKL_DMA1, 40, (void*)&ADC0_RA, voice_buf, 4000*2, 1);
+//    uart_send_string(UART_TEST, "This is sound level Test!");
+//    uart_send1(UART_TEST, '\n');
+    pit_init(PIT0, 125); // 8kHz
     //4. 给有关变量赋初值
 	mRuncount=0;            //主循环计数器
     ADCResult=0;
     //5. 使能模块中断
     uart_enable_re_int(UART_TEST);
-    adc_enable_int();
+    enable_irq(MKL_DMA1);
     //6. 开总中断
 	ENABLE_INTERRUPTS;
     
@@ -42,9 +45,14 @@ int main(void)
 
 		if (ADCResult != 0) {
 			//将采集的A/D值通过串口发送到PC
-			uart_send1 (UART_TEST ,(uint_8)(ADCResult>>8));
-			uart_send1 (UART_TEST ,ADCResult);
+			for (i=0; i<4000; i++) {
+				uart_send1 (UART_TEST ,(uint_8)(voice_buf[i]>>8));
+				uart_send1 (UART_TEST ,voice_buf[i]);
+			}
 			ADCResult = 0;
+
+			dmaInitPerToMem (MKL_DMA1, 40, (void*)&ADC0_RA, voice_buf, 4000*2, 1);
+			PIT_TCTRL(PIT0)|=PIT_TCTRL_TEN_MASK;       //使能pit模块运行
 		}
 	}//主循环end_for
 	//主循环结束==================================================================

@@ -32,3 +32,13 @@ void isr_adc(void) {
 	exit_critical();
 }
 
+
+void isr_dma1(void) {
+	enter_critical();
+	PIT_TCTRL(PIT0) &= ~(PIT_TCTRL_TEN_MASK);       //禁止pit模块运行
+	DMA_DSR_BCR1 |= DMA_DSR_BCR_DONE_MASK;
+	DMA_DCR1 &= ~DMA_DCR_EINT_MASK;
+	DMAMUX0_CHCFG(MKL_DMA1) = 0x00;         // 禁能DMAMUX
+	ADCResult = 1;//建立完成标志，供主程序进行查询
+	exit_critical();
+}

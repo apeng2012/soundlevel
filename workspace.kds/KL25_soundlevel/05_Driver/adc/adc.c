@@ -63,8 +63,8 @@ void adc_init( uint_8 diff,uint_8 accurary,uint_8 HardwareAverage)
                  + ADC_CFG2_ADHSC_MASK       //普通转换
                  + ADC_CFG2_ADLSTS_MASK);    //默认最长采样时间
 	
-    //配置ADC0_SC2：硬件触发，比较功能禁用；DMA禁用；默认外部参考电压 VREFH and VREFL
-     ADC0_SC2 = ADC_SC2_ADTRG_MASK;
+    //配置ADC0_SC2：硬件触发，比较功能禁用；DMA使能；默认外部参考电压 VREFH and VREFL
+     ADC0_SC2 = ADC_SC2_ADTRG_MASK | ADC_SC2_DMAEN_MASK;
     
      ADC0_SC1A = ADC_SC1_ADCH(0);
 
@@ -73,8 +73,8 @@ void adc_init( uint_8 diff,uint_8 accurary,uint_8 HardwareAverage)
     	ADC0_SC1A |= (ADC_SC1_DIFF_MASK);
     else if(SINGLE_END == diff)
     	ADC0_SC1A &= ~(ADC_SC1_DIFF_MASK );
-    //ADC模块中断
-    ADC0_SC1A |= (ADC_SC1_AIEN_MASK);
+    //禁止ADC模块中断
+    ADC0_SC1A &= ~(ADC_SC1_AIEN_MASK);
 }
 
 //============================================================================

@@ -15,6 +15,7 @@
 #include "adc.h"
 #include "sysinit.h"
 #include "pit.h"
+#include "MKL_DMA.h"
 
 //定义全局变量
 //定义系统时钟、总线时钟
